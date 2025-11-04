@@ -1,3 +1,5 @@
+<p-slider [(ngModel)]="lengthMdp" [min]="4" [max]="64" [step]="1" (onChange)="onSliderChange()" />
+<div class="password-display">{{ generatedPassword }}</div>
 <p-button label="Copier le mot de passe" />
 <div>
   <div>
