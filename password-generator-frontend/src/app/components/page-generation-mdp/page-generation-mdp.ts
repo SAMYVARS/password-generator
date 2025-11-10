@@ -32,4 +32,10 @@ export class PageGenerationMdp {
   onSliderChange(): void {
     this.generatePassword();
   }
+
+  getSliderPosition(): number {
+    const min = 4;
+    const max = 40;
+    return ((this.lengthMdp - min) / (max - min)) * 100;
+  }
 }
