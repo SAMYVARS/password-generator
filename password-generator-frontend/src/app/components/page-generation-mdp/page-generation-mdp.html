@@ -1,8 +1,8 @@
 <div class="password-display">
-  <div class="password-text">{{ generatedPassword }}</div>
+  <div class="password-text" [class.password-animating]="passwordAnimating">{{ generatedPassword }}</div>
   <div class="password-actions">
     <p-button label="Copier" class="copy-button" (click)="copyPassword()"/>
-    <mat-icon class="refresh-icon">autorenew</mat-icon>
+    <mat-icon class="refresh-icon" (click)="generatePassword()">autorenew</mat-icon>
   </div>
 </div>
 <div class="settings-container">
@@ -16,20 +16,32 @@
   </div>
   <div class="checkbox-container">
     <div class="checkbox-item">
-      <p-checkbox [(ngModel)]="includeLetters" [binary]="true"></p-checkbox>
-      <label>Lettres (ex. Aa)</label>
+      <p-checkbox [(ngModel)]="includeLetters" [binary]="true" [disabled]="isCheckboxDisabled('letters')" (onChange)="onCheckboxChange('letters')"></p-checkbox>
+      <div class="label-container">
+        <span class="label-text">Lettres</span>
+        <span class="label-example">(ex. Aa)</span>
+      </div>
     </div>
     <div class="checkbox-item">
-      <p-checkbox [(ngModel)]="includeSymbols"[binary]="true"></p-checkbox>
-      <label>Symboles (&#64;&amp;$!#?)</label>
+      <p-checkbox [(ngModel)]="includeSymbols" [binary]="true" [disabled]="isCheckboxDisabled('symbols')" (onChange)="onCheckboxChange('symbols')"></p-checkbox>
+      <div class="label-container">
+        <span class="label-text">Symboles</span>
+        <span class="label-example">(&#64;&amp;$!#?)</span>
+      </div>
     </div>
     <div class="checkbox-item">
-      <p-checkbox [(ngModel)]="includeNumbers" [binary]="true"></p-checkbox>
-      <label>Chiffres (ex. 345)</label>
+      <p-checkbox [(ngModel)]="includeNumbers" [binary]="true" [disabled]="isCheckboxDisabled('numbers')" (onChange)="onCheckboxChange('numbers')"></p-checkbox>
+      <div class="label-container">
+        <span class="label-text">Chiffres</span>
+        <span class="label-example">(ex. 345)</span>
+      </div>
     </div>
     <div class="checkbox-item">
-      <p-checkbox [(ngModel)]="includeSimilar" [binary]="true"></p-checkbox>
-      <label>Caractères semblables (ex. 0O 1| 2Z)</label>
+      <p-checkbox [(ngModel)]="includeSimilar" [binary]="true" [disabled]="isCheckboxDisabled('similar')" (onChange)="onCheckboxChange('similar')"></p-checkbox>
+      <div class="label-container">
+        <span class="label-text">Caractères semblables</span>
+        <span class="label-example">(ex. 0O 1| 2Z)</span>
+      </div>
     </div>
   </div>
 </div>

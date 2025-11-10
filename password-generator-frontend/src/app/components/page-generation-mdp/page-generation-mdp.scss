@@ -26,6 +26,7 @@
     padding: 0.5rem 1rem;
     flex: 1;
     min-width: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 
     /* Style de la scrollbar pour qu'elle soit discrète */
     &::-webkit-scrollbar {
@@ -44,6 +45,10 @@
       &:hover {
         background: #1976D2;
       }
+    }
+
+    &.password-animating {
+      animation: fadeInScale 0.5s ease;
     }
   }
 
@@ -80,10 +85,26 @@
   }
 }
 
+@keyframes fadeInScale {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .settings-container{
   display: flex;
   flex-direction: row;
-  gap: 3rem;
+  width: 70rem;
+  gap: 8rem;
   background-color: white;
   padding: 2rem 8rem;
   border-radius: 2rem;
@@ -162,8 +183,30 @@
 
     .checkbox-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 0.5rem;
+
+      .label-container {
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        user-select: none;
+        padding-top: 0.125rem;
+
+        .label-text {
+          font-size: 1rem;
+          line-height: 1.2;
+          white-space: nowrap;
+        }
+
+        .label-example {
+          font-size: 0.85rem;
+          color: #6b7280;
+          line-height: 1.2;
+          white-space: nowrap;
+          display: block;
+        }
+      }
 
       label {
         cursor: pointer;

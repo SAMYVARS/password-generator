@@ -21,6 +21,7 @@ export class PageGenerationMdp {
   includeNumbers: boolean = true;
   includeSymbols: boolean = true;
   includeSimilar: boolean = true;
+  passwordAnimating: boolean = false;
 
   constructor() {
     this.generatePassword();
@@ -28,19 +29,19 @@ export class PageGenerationMdp {
 
   generatePassword(): void {
     let chars = '';
-    
+
     if (this.includeLetters) {
       chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
     }
-    
+
     if (this.includeNumbers) {
       chars += '0123456789';
     }
-    
+
     if (this.includeSymbols) {
       chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
     }
-    
+
     if (this.includeSimilar) {
       chars += '0O1l|2Z';
     }
@@ -56,6 +57,16 @@ export class PageGenerationMdp {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     this.generatedPassword = password;
+
+    // Déclencher l'animation
+    this.triggerPasswordAnimation();
+  }
+
+  triggerPasswordAnimation(): void {
+    this.passwordAnimating = true;
+    setTimeout(() => {
+      this.passwordAnimating = false;
+    }, 500);
   }
 
   onSliderChange(event?: any): void {
@@ -68,18 +79,27 @@ export class PageGenerationMdp {
     this.generatePassword();
   }
 
-  // Vérifie s'il reste au moins une option cochée
-  hasAtLeastOneOption(): boolean {
-    return this.includeLetters || this.includeNumbers || this.includeSymbols || this.includeSimilar;
-  }
-
-  // Si rien n'est coché alors `includeLetters` = true (les autres false)
+  // Si rien n'est coché, empêcher le décochage de la dernière checkbox
   onCheckboxChange(option: 'letters' | 'numbers' | 'symbols' | 'similar'): void {
-    if (!(this.includeLetters || this.includeNumbers || this.includeSymbols || this.includeSimilar)) {
-      this.includeLetters = true;
-      this.includeNumbers = false;
-      this.includeSymbols = false;
-      this.includeSimilar = false;
+    // Vérifier si au moins une option est cochée
+    const hasAtLeastOne = this.includeLetters || this.includeNumbers || this.includeSymbols || this.includeSimilar;
+
+    // Si aucune option n'est cochée, recocher celle qu'on vient de décocher
+    if (!hasAtLeastOne) {
+      switch (option) {
+        case 'letters':
+          this.includeLetters = true;
+          break;
+        case 'numbers':
+          this.includeNumbers = true;
+          break;
+        case 'symbols':
+          this.includeSymbols = true;
+          break;
+        case 'similar':
+          this.includeSimilar = true;
+          break;
+      }
     }
 
     // Génère le mot de passe après avoir modifié les options
@@ -96,5 +116,27 @@ export class PageGenerationMdp {
     const min = 4;
     const max = 40;
     return ((this.lengthMdp - min) / (max - min)) * 100;
+  }
+
+  // Vérifie si une checkbox doit être désactivée (si c'est la seule cochée)
+  isCheckboxDisabled(option: 'letters' | 'numbers' | 'symbols' | 'similar'): boolean {
+    const checkedCount = [this.includeLetters, this.includeNumbers, this.includeSymbols, this.includeSimilar]
+      .filter(checked => checked).length;
+
+    // Si une seule checkbox est cochée et que c'est celle-ci, la désactiver
+    if (checkedCount === 1) {
+      switch (option) {
+        case 'letters':
+          return this.includeLetters;
+        case 'numbers':
+          return this.includeNumbers;
+        case 'symbols':
+          return this.includeSymbols;
+        case 'similar':
+          return this.includeSimilar;
+      }
+    }
+
+    return false;
   }
 }
