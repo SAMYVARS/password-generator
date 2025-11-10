@@ -1,17 +1,33 @@
-<p-slider [(ngModel)]="lengthMdp" [min]="4" [max]="64" [step]="1" (onChange)="onSliderChange()" />
-<div class="password-display">{{ generatedPassword }}</div>
-<p-button label="Copier le mot de passe" />
-<div>
-  <div>
-    <div>
-      <p-checkbox [binary]="true" ></p-checkbox>
-      <label>Lettres (ex. Aa)</label>
-      <p-checkbox [binary]="true"></p-checkbox>
-      <label>Symboles (@&$!#?)</label>
+<div class="password-display">
+  <div class="password-text">{{ generatedPassword }}</div>
+  <div class="password-actions">
+    <p-button label="Copier" class="copy-button"/>
+    <mat-icon class="refresh-icon">autorenew</mat-icon>
+  </div>
+</div>
+<div class="settings-container">
+  <div class="slider-container">
+    <div class="slider-wrapper">
+      <p-slider [(ngModel)]="lengthMdp" [min]="4" [max]="40" [step]="1" (onChange)="onSliderChange()" class="slider" />
+      <div class="slider-value-label" [style.left.%]="getSliderPosition()">
+        {{ lengthMdp }}
+      </div>
     </div>
-    <div>
+  </div>
+  <div class="checkbox-container">
+    <div class="checkbox-item">
+      <p-checkbox [binary]="true"></p-checkbox>
+      <label>Lettres (ex. Aa)</label>
+    </div>
+    <div class="checkbox-item">
+      <p-checkbox [binary]="true"></p-checkbox>
+      <label>Symboles (&#64;&amp;$!#?)</label>
+    </div>
+    <div class="checkbox-item">
       <p-checkbox [binary]="true"></p-checkbox>
       <label>Chiffres (ex. 345)</label>
+    </div>
+    <div class="checkbox-item">
       <p-checkbox [binary]="true"></p-checkbox>
       <label>Caractères semblables (ex. 0O 1| 2Z)</label>
     </div>

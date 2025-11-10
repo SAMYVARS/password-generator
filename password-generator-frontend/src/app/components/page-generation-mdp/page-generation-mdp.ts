@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import {Checkbox} from 'primeng/checkbox';
 import { SliderModule } from 'primeng/slider';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-page-generation-mdp',
-  imports: [ButtonModule, Checkbox, SliderModule, FormsModule],
+  imports: [ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule],
   templateUrl: './page-generation-mdp.html',
   standalone: true,
   styleUrl: './page-generation-mdp.scss'
@@ -30,5 +31,11 @@ export class PageGenerationMdp {
 
   onSliderChange(): void {
     this.generatePassword();
+  }
+
+  getSliderPosition(): number {
+    const min = 4;
+    const max = 40;
+    return ((this.lengthMdp - min) / (max - min)) * 100;
   }
 }

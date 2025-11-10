@@ -3,29 +3,203 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 90vh;
   gap: 2rem;
 }
 
-p-slider {
-  width: 50%;
-  max-width: 600px;
-}
-
 .password-display {
-  font-size: 1.5rem;
-  font-family: monospace;
-  padding: 1rem 2rem;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  word-break: break-all;
-  text-align: center;
-  min-height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 600px;
-  width: 50%;
+  max-width: 800px;
+  width: 100%;
+  gap: 1rem;
+  min-height: 3rem;
+
+  .password-text {
+    font-size: 1.5rem;
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    text-align: center;
+    padding: 0.5rem 1rem;
+    flex: 1;
+    min-width: 0;
+
+    /* Style de la scrollbar pour qu'elle soit discrète */
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #46aaff;
+      border-radius: 3px;
+
+      &:hover {
+        background: #1976D2;
+      }
+    }
+  }
+
+  .password-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+
+    .refresh-icon {
+      cursor: pointer;
+      color: #000000;
+      transition: transform 0.3s ease, color 0.3s ease;
+
+      &:hover {
+        color: #1976D2;
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .copy-button ::ng-deep .p-button {
+    background-color: #46aaff !important;
+    border-color: #46aaff !important;
+    color: #ffffff !important;
+    border-radius: 2rem;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: #1976D2 !important;
+      border-color: #1976D2 !important;
+      color: #ffffff !important;
+    }
+  }
 }
 
+.settings-container{
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  background-color: white;
+  padding: 2rem 8rem;
+  border-radius: 2rem;
+
+  .slider-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+
+    .slider-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+
+      .slider-value-label {
+        position: absolute;
+        top: -2.5rem;
+        transform: translateX(-50%);
+        background-color: #46aaff;
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        white-space: nowrap;
+        transition: left 0.1s ease-out;
+        pointer-events: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
+          height: 0;
+          border-left: 6px solid transparent;
+          border-right: 6px solid transparent;
+          border-top: 6px solid #46aaff;
+        }
+      }
+    }
+
+    p-slider {
+      width: 100%;
+    }
+
+    ::ng-deep{
+      .p-slider-range {
+        background-color: #46aaff !important;
+      }
+
+      .p-slider-handle {
+        background-color: #ffffff !important;
+
+        &:focus {
+          border-color: #46aaff !important;
+          box-shadow: 0 0 0 0.2rem rgba(70, 170, 255, 0.5) !important;
+          outline: none !important;
+        }
+      }
+    }
+  }
+
+  .checkbox-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.5rem 2rem;
+    width: 100%;
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      label {
+        cursor: pointer;
+        user-select: none;
+      }
+    }
+
+    ::ng-deep {
+      .p-checkbox {
+        .p-checkbox-box {
+          border-color: #46aaff !important;
+          border-width: 2px;
+          border-radius: 0.25rem;
+          width: 1.25rem;
+          height: 1.25rem;
+          background-color: white;
+
+          &.p-highlight {
+            background-color: #46aaff !important;
+            border-color: #46aaff !important;
+
+            .p-checkbox-icon {
+              color: white !important;
+            }
+          }
+
+          &:hover {
+            border-color: #1976D2 !important;
+            background-color: rgba(70, 170, 255, 0.1);
+          }
+
+          &:focus {
+            box-shadow: 0 0 0 0.2rem rgba(70, 170, 255, 0.25) !important;
+            border-color: #46aaff !important;
+          }
+        }
+      }
+    }
+  }
+}
