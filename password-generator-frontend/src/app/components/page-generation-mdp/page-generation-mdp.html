@@ -1,6 +1,7 @@
 <div class="password-display">
   {{ generatedPassword }}
   <p-button label="Copier" class="copy-button"/>
+  <mat-icon>autorenew</mat-icon>
 </div>
 <div class="settings-container">
   <div class="slider-container">
@@ -12,7 +13,7 @@
         <p-checkbox [binary]="true" ></p-checkbox>
         <label>Lettres (ex. Aa)</label>
         <p-checkbox [binary]="true"></p-checkbox>
-        <label>Symboles (@&$!#?)</label>
+        <label>Symboles (&#64;&amp;$!#?)</label>
       </div>
       <div>
         <p-checkbox [binary]="true"></p-checkbox>
