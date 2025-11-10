@@ -21,6 +21,7 @@ export class PageGenerationMdp {
   includeNumbers: boolean = true;
   includeSymbols: boolean = true;
   includeSimilar: boolean = true;
+  passwordAnimating: boolean = false;
 
   constructor() {
     this.generatePassword();
@@ -56,6 +57,16 @@ export class PageGenerationMdp {
       password += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     this.generatedPassword = password;
+
+    // Déclencher l'animation
+    this.triggerPasswordAnimation();
+  }
+
+  triggerPasswordAnimation(): void {
+    this.passwordAnimating = true;
+    setTimeout(() => {
+      this.passwordAnimating = false;
+    }, 500);
   }
 
   onSliderChange(event?: any): void {

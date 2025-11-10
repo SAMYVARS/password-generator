@@ -1,5 +1,5 @@
 <div class="password-display">
-  <div class="password-text">{{ generatedPassword }}</div>
+  <div class="password-text" [class.password-animating]="passwordAnimating">{{ generatedPassword }}</div>
   <div class="password-actions">
     <p-button label="Copier" class="copy-button" (click)="copyPassword()"/>
     <mat-icon class="refresh-icon" (click)="generatePassword()">autorenew</mat-icon>

@@ -26,6 +26,7 @@
     padding: 0.5rem 1rem;
     flex: 1;
     min-width: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 
     /* Style de la scrollbar pour qu'elle soit discrète */
     &::-webkit-scrollbar {
@@ -44,6 +45,10 @@
       &:hover {
         background: #1976D2;
       }
+    }
+
+    &.password-animating {
+      animation: fadeInScale 0.5s ease;
     }
   }
 
@@ -77,6 +82,21 @@
       border-color: #1976D2 !important;
       color: #ffffff !important;
     }
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
