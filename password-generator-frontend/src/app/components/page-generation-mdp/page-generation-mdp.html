@@ -1,18 +1,18 @@
-<p-slider [(ngModel)]="lengthMdp" [min]="4" [max]="64" [step]="1" (onChange)="onSliderChange()" />
+<p-slider [(ngModel)]="lengthMdp" [min]="4" [max]="64" [step]="1" (onChange)="onSliderChange($event)" />
 <div class="password-display">{{ generatedPassword }}</div>
-<p-button label="Copier le mot de passe" />
+<p-button label="Copier le mot de passe" (click)="copyPassword()" />
 <div>
   <div>
     <div>
-      <p-checkbox [binary]="true" ></p-checkbox>
+      <p-checkbox [(ngModel)]="includeLetters" [binary]="true" (onChange)="onCheckboxChange('letters')"></p-checkbox>
       <label>Lettres (ex. Aa)</label>
-      <p-checkbox [binary]="true"></p-checkbox>
+      <p-checkbox [(ngModel)]="includeSymbols" [binary]="true" (onChange)="onCheckboxChange('symbols')"></p-checkbox>
       <label>Symboles (@&$!#?)</label>
     </div>
     <div>
-      <p-checkbox [binary]="true"></p-checkbox>
+      <p-checkbox [(ngModel)]="includeNumbers" [binary]="true" (onChange)="onCheckboxChange('numbers')"></p-checkbox>
       <label>Chiffres (ex. 345)</label>
-      <p-checkbox [binary]="true"></p-checkbox>
+      <p-checkbox [(ngModel)]="includeSimilar" [binary]="true" (onChange)="onCheckboxChange('similar')"></p-checkbox>
       <label>Caractères semblables (ex. 0O 1| 2Z)</label>
     </div>
   </div>
