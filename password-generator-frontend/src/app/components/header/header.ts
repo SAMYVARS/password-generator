@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
 import {MatIconButton} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
+    CommonModule,
     MatIconButton,
     MatIconModule
   ],
@@ -15,8 +18,19 @@ import { Router } from '@angular/router';
 })
 export class Header {
   isLoggedIn = false;
+  isLoginPage = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    // Détecter les changements de route
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.isLoginPage = event.url === '/login';
+      });
+
+    // Vérifier la route initiale
+    this.isLoginPage = this.router.url === '/login';
+  }
 
   navigateToLogin() {
     this.router.navigate(['/login']);

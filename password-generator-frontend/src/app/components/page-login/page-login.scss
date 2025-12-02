@@ -9,9 +9,10 @@
 
 .login-card {
   width: 100%;
-  max-width: 450px;
+  max-width: 400px;
   padding: 2rem;
-  border-radius: 16px;
+  background-color: white;
+  border-radius: 2rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 
   mat-card-header {
@@ -27,15 +28,15 @@
         gap: 1rem;
 
         .lock-icon {
-          font-size: 40px;
-          width: 40px;
-          height: 40px;
-          color: #667eea;
+          font-size: 30px;
+          width: 30px;
+          height: 30px;
+          color: #46aaff;
         }
 
         h1 {
           margin: 0;
-          font-size: 32px;
+          font-size: 24px;
           font-weight: 700;
           color: #333;
         }
@@ -62,7 +63,7 @@ form {
   }
 
   mat-form-field {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -89,20 +90,24 @@ form {
 
 .actions {
   margin-top: 1rem;
+  display: flex;
+  justify-content: center;
 
   .login-button {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
+    width: 10rem;
+    padding: 8px;
+    font-size: 14px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
-    border-radius: 8px;
+    border-radius: 0.75rem;
+    background-color: #46aaff;
+    color: white;
     transition: all 0.3s ease;
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
   }
 }
@@ -115,24 +120,12 @@ form {
   padding-top: 1.5rem;
   border-top: 1px solid #e0e0e0;
 
-  .forgot-password {
-    text-align: center;
-    color: #667eea;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s ease;
-
-    &:hover {
-      color: #764ba2;
-      text-decoration: underline;
-    }
-  }
-
   .register-link {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+
 
     span {
       color: #666;
@@ -141,34 +134,11 @@ form {
 
     button {
       font-weight: 600;
-    }
-  }
-}
 
-// Responsive
-@media (max-width: 600px) {
-  .login-container {
-    padding: 1rem;
-  }
-
-  .login-card {
-    padding: 1.5rem;
-
-    mat-card-header {
-      mat-card-title {
-        .title-container {
-          h1 {
-            font-size: 24px;
-          }
-
-          .lock-icon {
-            font-size: 32px;
-            width: 32px;
-            height: 32px;
-          }
-        }
+      &:hover{
+        transition: color 0.3s ease;
+        color: #333333;
       }
     }
   }
 }
-
