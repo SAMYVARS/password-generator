@@ -5,6 +5,11 @@
   </div>
 
   <div class="profile-button">
-    <mat-icon>account_circle</mat-icon>
+    @if (!isLoggedIn) {
+      <mat-icon>account_circle</mat-icon>
+    }
+    @else {
+      <img src="https://wallpapers-clan.com/wp-content/uploads/2023/05/cool-pfp-02.jpg" class="profile-picture"/>
+    }
   </div>
 </div>

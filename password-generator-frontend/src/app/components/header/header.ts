@@ -13,5 +13,5 @@ import {MatIconModule} from '@angular/material/icon';
   styleUrl: './header.scss'
 })
 export class Header {
-
+  isLoggedIn = false;
 }
