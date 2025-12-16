@@ -1,17 +1,16 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import {Checkbox} from 'primeng/checkbox';
 import { SliderModule } from 'primeng/slider';
-import { MatIconModule } from '@angular/material/icon';
-import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { AuthService, User } from '../../services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-page-generation-mdp',
-  imports: [ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule, CommonModule, InputTextModule],
+  imports: [CommonModule, ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule, DialogModule, InputTextModule],
   templateUrl: './page-generation-mdp.html',
   standalone: true,
   styleUrl: './page-generation-mdp.scss'
@@ -28,6 +27,12 @@ export class PageGenerationMdp {
   includeSimilar: boolean = true;
   passwordAnimating: boolean = false;
   liked: boolean = false;
+  savedPasswordId: number | null = null;
+  displaySaveDialog: boolean = false;
+  displayDeleteDialog: boolean = false;
+  serviceName: string = '';
+
+  constructor(private authService: AuthService) {
   pwnedInfo: any = null;
 
   generationMode: 'random' | 'ai' = 'random';
@@ -43,20 +48,6 @@ export class PageGenerationMdp {
     });
   }
 
-  goToLogin(): void {
-    this.router.navigate(['/login']);
-  }
-
-  logout(): void {
-    this.authService.logout().subscribe({
-      next: () => {
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        console.error('Erreur lors de la déconnexion', err);
-      }
-    });
-  }
 
   generatePassword(): void {
     if (this.generationMode === 'ai') {
@@ -146,7 +137,7 @@ export class PageGenerationMdp {
     }, 500);
   }
 
-  onSliderChange(event?: any): void {
+  onSliderChange(): void {
     // si la valeur n'a pas changé, ne rien faire
     if (this.lengthMdp === this.lastLength) {
       return;
@@ -216,14 +207,45 @@ export class PageGenerationMdp {
     return false;
   }
   savePassword(): void {
-    if (this.liked) {
-      console.log(`Suppression du mot de passe ${this.generatedPassword} de la base`);
-      // logique pour supprimer de la DB
-      this.liked = false;
-    } else {
-      console.log(`Sauvegarde du mot de passe ${this.generatedPassword} dans la base`);
-      // logique pour ajouter dans la DB
-      this.liked = true;
+    if (!this.currentUser) {
+      alert('Veuillez vous connecter pour sauvegarder un mot de passe');
+      return;
     }
+
+    if (this.liked && this.savedPasswordId) {
+      this.displayDeleteDialog = true;
+    } else {
+      // Open dialog
+      this.serviceName = '';
+      this.displaySaveDialog = true;
+    }
+  }
+
+  confirmSavePassword(): void {
+    if (this.serviceName) {
+      this.authService.savePassword(this.serviceName, this.generatedPassword).subscribe({
+        next: (response) => {
+          if (response.success) {
+            this.liked = true;
+            this.savedPasswordId = response.password.id;
+            this.displaySaveDialog = false;
+          }
+        }
+      });
+    }
+  }
+
+  deleteSavedPassword(): void {
+      if (this.savedPasswordId) {
+        this.authService.deletePassword(this.savedPasswordId).subscribe({
+            next: (response) => {
+            if (response.success) {
+                this.liked = false;
+                this.savedPasswordId = null;
+                this.displayDeleteDialog = false;
+            }
+            }
+        });
+      }
   }
 }

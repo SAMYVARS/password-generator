@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
-import {MatIconButton} from '@angular/material/button';
+import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import { Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { AuthService, User } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
     CommonModule,
-    MatIconButton,
+    MatButtonModule,
     MatIconModule
   ],
   templateUrl: './header.html',
@@ -19,17 +20,24 @@ import { filter } from 'rxjs/operators';
 export class Header {
   isLoggedIn = false;
   isLoginPage = false;
+  currentUser: User | null = null;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     // Détecter les changements de route
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        this.isLoginPage = event.url === '/login' || event.url === '/register';
+        this.isLoginPage = event.url.startsWith('/login') || event.url.startsWith('/register');
       });
 
     // Vérifier la route initiale
-    this.isLoginPage = this.router.url === '/login' || this.router.url === '/register';
+    this.isLoginPage = this.router.url.startsWith('/login') || this.router.url.startsWith('/register');
+
+    // Subscribe to auth state
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      this.isLoggedIn = !!user;
+    });
   }
 
   navigateToLogin() {

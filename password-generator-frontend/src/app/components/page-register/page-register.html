@@ -1,4 +1,10 @@
 <div class="register-container">
+  <div class="back-button-container">
+    <button mat-button (click)="navigateToHome()">
+      <mat-icon>arrow_back</mat-icon>
+      Retour à l'accueil
+    </button>
+  </div>
   <mat-card class="register-card">
     <mat-card-header>
       <mat-card-title>
@@ -13,7 +19,7 @@
       <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
         <div class="form-field">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Nom complet</mat-label>
+            <mat-label>Username</mat-label>
             <input
               matInput
               type="text"
