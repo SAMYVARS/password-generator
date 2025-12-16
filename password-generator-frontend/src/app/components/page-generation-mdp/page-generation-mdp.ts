@@ -4,10 +4,12 @@ import { ButtonModule } from 'primeng/button';
 import {Checkbox} from 'primeng/checkbox';
 import { SliderModule } from 'primeng/slider';
 import { MatIconModule } from '@angular/material/icon';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-page-generation-mdp',
-  imports: [ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule],
+  imports: [ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule, CommonModule],
   templateUrl: './page-generation-mdp.html',
   standalone: true,
   styleUrl: './page-generation-mdp.scss'
@@ -23,8 +25,9 @@ export class PageGenerationMdp {
   includeSimilar: boolean = true;
   passwordAnimating: boolean = false;
   liked: boolean = false;
+  pwnedInfo: any = null;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.generatePassword();
   }
 
@@ -50,6 +53,7 @@ export class PageGenerationMdp {
     // Si chars est vide alors retournée aucun mot de passe
     if (chars === '') {
       this.generatedPassword = '';
+      this.pwnedInfo = null;
       return;
     }
 
@@ -61,6 +65,22 @@ export class PageGenerationMdp {
 
     // Déclencher l'animation
     this.triggerPasswordAnimation();
+    this.checkPasswordLeak();
+  }
+
+  checkPasswordLeak(): void {
+    if (!this.generatedPassword) return;
+    
+    this.http.post('http://127.0.0.1:5000/api/check-password', { password: this.generatedPassword })
+      .subscribe({
+        next: (response: any) => {
+          this.pwnedInfo = response;
+        },
+        error: (error) => {
+          console.error('Error checking password leak', error);
+          this.pwnedInfo = null;
+        }
+      });
   }
 
   triggerPasswordAnimation(): void {

@@ -257,3 +257,34 @@
     }
   }
 }
+
+.leak-info {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  
+  .leak-warning, .leak-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    max-width: 800px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .leak-warning {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+  }
+
+  .leak-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+  }
+}

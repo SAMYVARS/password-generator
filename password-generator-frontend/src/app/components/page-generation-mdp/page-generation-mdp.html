@@ -48,3 +48,14 @@
     </div>
   </div>
 </div>
+
+<div class="leak-info" *ngIf="pwnedInfo">
+  <div *ngIf="pwnedInfo.pwned" class="leak-warning">
+    <mat-icon>warning</mat-icon>
+    <span>Ce mot de passe a été trouvé {{ pwnedInfo.count }} fois dans des fuites de données !</span>
+  </div>
+  <div *ngIf="!pwnedInfo.pwned" class="leak-success">
+    <mat-icon>check_circle</mat-icon>
+    <span>Ce mot de passe n'a pas été trouvé dans les fuites de données connues.</span>
+  </div>
+</div>
