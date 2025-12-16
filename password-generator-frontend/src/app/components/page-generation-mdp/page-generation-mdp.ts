@@ -9,11 +9,9 @@ import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthService, User } from '../../services/auth.service';
-import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-page-generation-mdp',
-  imports: [ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule, CommonModule],
   imports: [CommonModule, ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule, DialogModule, InputTextModule],
   templateUrl: './page-generation-mdp.html',
   standalone: true,
@@ -37,14 +35,15 @@ export class PageGenerationMdp {
   displayDeleteDialog: boolean = false;
   serviceName: string = '';
 
-  constructor(private authService: AuthService) {
-  pwnedInfo: any = null;
-
   generationMode: 'random' | 'ai' = 'random';
   userPrompt: string = '';
   isGeneratingAi: boolean = false;
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+    private cdr: ChangeDetectorRef
+  ) {
     this.generatePassword();
 
     // S'abonner aux changements d'utilisateur
@@ -122,7 +121,7 @@ export class PageGenerationMdp {
 
   checkPasswordLeak(): void {
     if (!this.generatedPassword) return;
-    
+
     this.http.post('http://127.0.0.1:5000/api/check-password', { password: this.generatedPassword })
       .subscribe({
         next: (response: any) => {
