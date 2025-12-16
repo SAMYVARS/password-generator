@@ -6,6 +6,8 @@ import { tap } from 'rxjs/operators';
 export interface User {
   id: number;
   username: string;
+  email?: string;
+  image_url?: string;
 }
 
 export interface AuthResponse {
@@ -18,7 +20,7 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = '/api';
+  private apiUrl = 'http://localhost:5001/api';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -53,15 +55,8 @@ export class AuthService {
       );
   }
 
-  register(username: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, { username, password }, { withCredentials: true })
-      .pipe(
-        tap(response => {
-          if (response.success && response.user) {
-            this.currentUserSubject.next(response.user);
-          }
-        })
-      );
+  register(username: string, email: string, password: string, image_url?: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, { username, email, password, image_url }, { withCredentials: true });
   }
 
   logout(): Observable<AuthResponse> {

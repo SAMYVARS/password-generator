@@ -1,4 +1,10 @@
 <div class="login-container">
+  <div class="back-button-container">
+    <button mat-button (click)="navigateToHome()">
+      <mat-icon>arrow_back</mat-icon>
+      Retour à l'accueil
+    </button>
+  </div>
   <mat-card class="login-card">
     <mat-card-header>
       <mat-card-title>
@@ -13,15 +19,15 @@
       <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
         <div class="form-field">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Email</mat-label>
+            <mat-label>Username</mat-label>
             <input
               matInput
-              type="email"
+              type="text"
               [(ngModel)]="email"
               name="email"
-              placeholder="exemple@email.com"
+              placeholder="Email ou nom d'utilisateur"
               required>
-            <mat-icon matPrefix>email</mat-icon>
+            <mat-icon matPrefix>person</mat-icon>
           </mat-form-field>
         </div>
 
@@ -79,4 +85,3 @@
     </mat-card-content>
   </mat-card>
 </div>
-

@@ -1,10 +1,17 @@
 .register-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100%;
   flex-grow: 1;
   padding: 5rem 2rem;
+  gap: 2rem;
+}
+
+.back-button-container {
+  align-self: flex-start;
+  margin-left: max(0px, calc(50% - 200px)); // Align with card left edge roughly
 }
 
 .register-card {
@@ -142,4 +149,3 @@ form {
     }
   }
 }
-

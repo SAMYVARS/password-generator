@@ -1,3 +1,5 @@
+@use "sass:color";
+
 html, body {
     margin: 0;
     padding: 0;
@@ -33,3 +35,141 @@ mat-icon {
     font-feature-settings: 'liga';
 }
 
+/* PrimeNG Dialog Customization */
+.p-dialog {
+    border-radius: 2rem !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15) !important; // Increased shadow
+    border: none !important;
+    overflow: hidden !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif !important;
+    transform: scale(1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); // Bouncy effect
+
+    &.ng-enter {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    &.ng-enter-active {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    .p-dialog-header {
+        background-color: white !important;
+        padding: 1.5rem 2rem 1rem 2rem !important;
+        border-top-left-radius: 2rem !important;
+        border-top-right-radius: 2rem !important;
+
+        .p-dialog-title {
+            font-weight: 700 !important;
+            font-size: 1.25rem !important;
+            color: #333 !important;
+        }
+
+        .p-dialog-header-icons {
+            .p-dialog-header-close {
+                color: #666 !important;
+                &:hover {
+                    background-color: #f5f5f5 !important;
+                    color: #333 !important;
+                }
+            }
+        }
+    }
+
+    .p-dialog-content {
+        background-color: white !important;
+        padding: 0 2rem 1.5rem 2rem !important;
+        color: #333 !important;
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+
+            label {
+                font-weight: 600;
+                color: #555;
+            }
+
+            input {
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ddd;
+                border-radius: 0.5rem;
+                font-size: 1rem;
+                transition: border-color 0.3s;
+
+                &:focus {
+                    outline: none;
+                    border-color: #46aaff;
+                }
+            }
+        }
+
+        .confirmation-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.1rem;
+
+            i {
+                color: #ff9800; /* Warning color */
+            }
+        }
+    }
+
+    .p-dialog-footer {
+        background-color: white !important;
+        padding: 0 2rem 1.5rem 2rem !important;
+        border-bottom-left-radius: 2rem !important;
+        border-bottom-right-radius: 2rem !important;
+        text-align: right !important;
+        border-top: none !important;
+
+        button {
+            margin-left: 0.5rem !important;
+            border-radius: 0.75rem !important;
+            padding: 0.5rem 1rem !important;
+            font-weight: 600 !important;
+
+            &.p-button-text {
+                color: #666 !important;
+                background: transparent !important;
+
+                &:hover {
+                    background: #f5f5f5 !important;
+                    color: #333 !important;
+                }
+            }
+
+            &:not(.p-button-text):not(.p-button-danger) {
+                background: #46aaff !important;
+                border: none !important;
+                color: white !important;
+
+                &:hover {
+                    background: color.adjust(#46aaff, $lightness: -10%) !important;
+                }
+            }
+
+            &.p-button-danger {
+                background: #ef5350 !important;
+                border: none !important;
+                color: white !important;
+
+                &:hover {
+                    background: color.adjust(#ef5350, $lightness: -10%) !important;
+                }
+            }
+        }
+    }
+}
+
+/* PrimeNG Mask/Overlay */
+.p-component-overlay {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(4px);
+}

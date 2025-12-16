@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-page-register',
@@ -33,7 +34,7 @@ export class PageRegister {
   hideConfirmPassword: boolean = true;
   errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   onSubmit() {
     this.errorMessage = '';
@@ -54,19 +55,26 @@ export class PageRegister {
       return;
     }
 
-    console.log('Register attempt:', {
-      name: this.name,
-      email: this.email,
-      password: this.password,
-      profilePictureUrl: this.profilePictureUrl
+    this.authService.register(this.name, this.email, this.password, this.profilePictureUrl).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.router.navigate(['/login']);
+        } else {
+          this.errorMessage = response.message || 'Erreur lors de l\'inscription';
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Erreur lors de l\'inscription';
+      }
     });
-
-    // Navigate to login or home after successful registration
-    this.router.navigate(['/login']);
   }
 
   navigateToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  navigateToHome() {
+    this.router.navigate(['/']);
   }
 
   togglePasswordVisibility() {

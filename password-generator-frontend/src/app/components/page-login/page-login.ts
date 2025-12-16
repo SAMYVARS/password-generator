@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-page-login',
@@ -29,7 +30,7 @@ export class PageLogin {
   hidePassword: boolean = true;
   errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   onSubmit() {
     // Réinitialiser le message d'erreur
@@ -41,26 +42,30 @@ export class PageLogin {
       return;
     }
 
-    // Validation de l'email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.email)) {
-      this.errorMessage = 'Veuillez entrer une adresse email valide';
-      return;
-    }
 
-    // Simulation de connexion (à remplacer par un vrai service)
-    console.log('Login attempt:', { email: this.email, password: this.password });
-
-    // Pour l'instant, on navigue vers la page d'accueil
-    this.router.navigate(['/']);
+    this.authService.login(this.email, this.password).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.router.navigate(['/']);
+        } else {
+          this.errorMessage = response.message || 'Erreur de connexion';
+        }
+      },
+      error: (err) => {
+        this.errorMessage = err.error?.message || 'Erreur lors de la connexion';
+      }
+    });
   }
 
   navigateToRegister() {
     this.router.navigate(['/register']);
   }
 
+  navigateToHome() {
+    this.router.navigate(['/']);
+  }
+
   togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
   }
 }
-

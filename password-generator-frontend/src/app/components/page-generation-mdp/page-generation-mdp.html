@@ -1,13 +1,3 @@
-<div class="auth-section">
-  <div *ngIf="!currentUser" class="auth-button">
-    <button (click)="goToLogin()" class="login-btn">Se connecter</button>
-  </div>
-  <div *ngIf="currentUser" class="user-info">
-    <span class="username">{{ currentUser.username }}</span>
-    <button (click)="logout()" class="logout-btn">Déconnexion</button>
-  </div>
-</div>
-
 <div class="password-display">
   <div class="password-text" [class.password-animating]="passwordAnimating">{{ generatedPassword }}</div>
   <div class="password-actions">
@@ -21,7 +11,7 @@
 <div class="settings-container">
   <div class="slider-container">
     <div class="slider-wrapper">
-      <p-slider [(ngModel)]="lengthMdp" [min]="4" [max]="40" [step]="1" (onChange)="onSliderChange($event)" class="slider" />
+      <p-slider [(ngModel)]="lengthMdp" [min]="4" [max]="40" [step]="1" (onChange)="onSliderChange()" class="slider" />
       <div class="slider-value-label" [style.left.%]="getSliderPosition()">
         {{ lengthMdp }}
       </div>
@@ -29,33 +19,56 @@
   </div>
   <div class="checkbox-container">
     <div class="checkbox-item">
-      <p-checkbox [(ngModel)]="includeLetters" [binary]="true" [disabled]="isCheckboxDisabled('letters')" (onChange)="onCheckboxChange('letters')"></p-checkbox>
-      <div class="label-container">
+      <p-checkbox [(ngModel)]="includeLetters" [binary]="true" inputId="letters" (onChange)="onCheckboxChange('letters')" [disabled]="isCheckboxDisabled('letters')" />
+      <label for="letters" class="label-container">
         <span class="label-text">Lettres</span>
-        <span class="label-example">(ex. Aa)</span>
-      </div>
+        <span class="label-example">(a-z, A-Z)</span>
+      </label>
     </div>
     <div class="checkbox-item">
-      <p-checkbox [(ngModel)]="includeSymbols" [binary]="true" [disabled]="isCheckboxDisabled('symbols')" (onChange)="onCheckboxChange('symbols')"></p-checkbox>
-      <div class="label-container">
-        <span class="label-text">Symboles</span>
-        <span class="label-example">(&#64;&amp;$!#?)</span>
-      </div>
-    </div>
-    <div class="checkbox-item">
-      <p-checkbox [(ngModel)]="includeNumbers" [binary]="true" [disabled]="isCheckboxDisabled('numbers')" (onChange)="onCheckboxChange('numbers')"></p-checkbox>
-      <div class="label-container">
+      <p-checkbox [(ngModel)]="includeNumbers" [binary]="true" inputId="numbers" (onChange)="onCheckboxChange('numbers')" [disabled]="isCheckboxDisabled('numbers')" />
+      <label for="numbers" class="label-container">
         <span class="label-text">Chiffres</span>
-        <span class="label-example">(ex. 345)</span>
-      </div>
+        <span class="label-example">(0-9)</span>
+      </label>
     </div>
     <div class="checkbox-item">
-      <p-checkbox [(ngModel)]="includeSimilar" [binary]="true" [disabled]="isCheckboxDisabled('similar')" (onChange)="onCheckboxChange('similar')"></p-checkbox>
-      <div class="label-container">
-        <span class="label-text">Caractères semblables</span>
-        <span class="label-example">(ex. 0O 1| 2Z)</span>
-      </div>
+      <p-checkbox [(ngModel)]="includeSymbols" [binary]="true" inputId="symbols" (onChange)="onCheckboxChange('symbols')" [disabled]="isCheckboxDisabled('symbols')" />
+      <label for="symbols" class="label-container">
+        <span class="label-text">Symboles</span>
+        <span class="label-example">(!@#$...)</span>
+      </label>
+    </div>
+    <div class="checkbox-item">
+      <p-checkbox [(ngModel)]="includeSimilar" [binary]="true" inputId="similar" (onChange)="onCheckboxChange('similar')" [disabled]="isCheckboxDisabled('similar')" />
+      <label for="similar" class="label-container">
+        <span class="label-text">Caractères similaires</span>
+        <span class="label-example">(i, l, 1, L, o, 0, O)</span>
+      </label>
     </div>
   </div>
 </div>
 
+<p-dialog header="Sauvegarder le mot de passe" [(visible)]="displaySaveDialog" [modal]="true" [style]="{width: '400px'}">
+  <div class="p-fluid">
+    <div class="field">
+      <label for="serviceName">Nom du service</label>
+      <input pInputText id="serviceName" [(ngModel)]="serviceName" placeholder="Ex: Facebook, Gmail..." autofocus />
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Annuler" icon="pi pi-times" (click)="displaySaveDialog = false" styleClass="p-button-text"></p-button>
+    <p-button label="Sauvegarder" icon="pi pi-check" (click)="confirmSavePassword()" [disabled]="!serviceName"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Confirmation" [(visible)]="displayDeleteDialog" [modal]="true" [style]="{width: '400px'}">
+  <div class="confirmation-content">
+    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+    <span>Voulez-vous vraiment supprimer ce mot de passe ?</span>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Non" icon="pi pi-times" (click)="displayDeleteDialog = false" styleClass="p-button-text"></p-button>
+    <p-button label="Oui" icon="pi pi-check" (click)="deleteSavedPassword()" styleClass="p-button-danger"></p-button>
+  </ng-template>
+</p-dialog>

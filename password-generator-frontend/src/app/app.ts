@@ -15,6 +15,6 @@ export class App {
   constructor(public router: Router) {}
 
   shouldShowFooter(): boolean {
-    return this.router.url !== '/login' && this.router.url !== '/register';
+    return this.router.url !== '/login' && this.router.url !== '/register' && this.router.url !== '/profile';
   }
 }
