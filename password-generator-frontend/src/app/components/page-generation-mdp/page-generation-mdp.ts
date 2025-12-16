@@ -25,6 +25,7 @@ export class PageGenerationMdp {
   includeSymbols: boolean = true;
   includeSimilar: boolean = true;
   passwordAnimating: boolean = false;
+  liked: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {
     this.generatePassword();
@@ -159,7 +160,17 @@ export class PageGenerationMdp {
           return this.includeSimilar;
       }
     }
-
     return false;
+  }
+  savePassword(): void {
+    if (this.liked) {
+      console.log(`Suppression du mot de passe ${this.generatedPassword} de la base`);
+      // logique pour supprimer de la DB
+      this.liked = false;
+    } else {
+      console.log(`Sauvegarde du mot de passe ${this.generatedPassword} dans la base`);
+      // logique pour ajouter dans la DB
+      this.liked = true;
+    }
   }
 }

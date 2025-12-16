@@ -130,6 +130,15 @@
         transform: rotate(180deg);
       }
     }
+    .like-icon {
+      cursor: pointer;
+      color: #46aaff;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #ff4081;
+      }
+    }
   }
 
   .copy-button ::ng-deep .p-button {
