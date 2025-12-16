@@ -1,6 +1,20 @@
 <div class="body">
   <div class="header-title">
-    <img src="favicon.ico" alt="Logo" class="logo" />
+    <img src="favicon.ico" alt="Logo" class="logo"/>
     <span>Password Generator</span>
   </div>
+
+  @if (!isLoginPage) {
+    <div class="profile-button">
+      @if (!isLoggedIn) {
+        <button mat-icon-button (click)="navigateToLogin()">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+      } @else {
+        <button mat-icon-button (click)="navigateToProfile()">
+          <img src="https://wallpapers-clan.com/wp-content/uploads/2023/05/cool-pfp-02.jpg" alt="Profile" class="profile-picture"/>
+        </button>
+      }
+    </div>
+  }
 </div>

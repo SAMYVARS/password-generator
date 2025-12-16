@@ -1,0 +1,60 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1>{{ isRegisterMode ? 'Inscription' : 'Connexion' }}</h1>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Pseudo</label>
+        <input
+          type="text"
+          id="username"
+          [(ngModel)]="username"
+          name="username"
+          required
+          placeholder="Votre pseudo">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          placeholder="Votre mot de passe">
+      </div>
+
+      <div class="form-group" *ngIf="isRegisterMode">
+        <label for="confirmPassword">Confirmer le mot de passe</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+          placeholder="Confirmer le mot de passe">
+      </div>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="success-message" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+
+      <button type="submit" class="submit-btn">
+        {{ isRegisterMode ? 'S\'inscrire' : 'Se connecter' }}
+      </button>
+    </form>
+
+    <p class="switch-mode">
+      {{ isRegisterMode ? 'Déjà un compte ?' : 'Pas encore de compte ?' }}
+      <a (click)="switchMode()">
+        {{ isRegisterMode ? 'Se connecter' : 'S\'inscrire' }}
+      </a>
+    </p>
+  </div>
+</div>
+
