@@ -29,9 +29,22 @@ def init_db():
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
-            password_hash TEXT NOT NULL
+            email TEXT,
+            password_hash TEXT NOT NULL,
+            image_url TEXT
         )
     ''')
+
+    # Migration pour ajouter les colonnes si elles n'existent pas (pour les BDD existantes)
+    try:
+        cursor.execute('SELECT email FROM users LIMIT 1')
+    except sqlite3.OperationalError:
+        cursor.execute('ALTER TABLE users ADD COLUMN email TEXT')
+
+    try:
+        cursor.execute('SELECT image_url FROM users LIMIT 1')
+    except sqlite3.OperationalError:
+        cursor.execute('ALTER TABLE users ADD COLUMN image_url TEXT')
 
     # Table des mots de passe sauvegardés
     cursor.execute('''
@@ -74,8 +87,9 @@ def login():
 
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute('SELECT id, username FROM users WHERE username = ? AND password_hash = ?',
-                  (username, password_hash))
+    # Check for username OR email
+    cursor.execute('SELECT id, username, email, image_url FROM users WHERE (username = ? OR email = ?) AND password_hash = ?',
+                  (username, username, password_hash))
     user = cursor.fetchone()
     conn.close()
 
@@ -85,7 +99,12 @@ def login():
         return jsonify({
             'success': True,
             'message': 'Connexion réussie',
-            'user': {'id': user['id'], 'username': user['username']}
+            'user': {
+                'id': user['id'],
+                'username': user['username'],
+                'email': user['email'],
+                'image_url': user['image_url']
+            }
         })
 
     return jsonify({'success': False, 'message': 'Identifiants invalides'}), 401
@@ -96,6 +115,8 @@ def register():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
+    email = data.get('email')
+    image_url = data.get('image_url')
 
     if not username or not password:
         return jsonify({'success': False, 'message': 'Identifiant et mot de passe requis'}), 400
@@ -115,10 +136,16 @@ def register():
         conn.close()
         return jsonify({'success': False, 'message': 'Ce pseudo est déjà utilisé'}), 400
 
+    if email:
+        cursor.execute('SELECT id FROM users WHERE email = ?', (email,))
+        if cursor.fetchone():
+            conn.close()
+            return jsonify({'success': False, 'message': 'Cet email est déjà utilisé'}), 400
+
     password_hash = hashlib.sha256(password.encode()).hexdigest()
 
-    cursor.execute('INSERT INTO users (username, password_hash) VALUES (?, ?)',
-                  (username, password_hash))
+    cursor.execute('INSERT INTO users (username, password_hash, email, image_url) VALUES (?, ?, ?, ?)',
+                  (username, password_hash, email, image_url))
     conn.commit()
     user_id = cursor.lastrowid
     conn.close()
@@ -126,7 +153,12 @@ def register():
     return jsonify({
         'success': True,
         'message': 'Compte créé avec succès',
-        'user': {'id': user_id, 'username': username}
+        'user': {
+            'id': user_id,
+            'username': username,
+            'email': email,
+            'image_url': image_url
+        }
     })
 
 
@@ -142,12 +174,20 @@ def check_auth():
     if 'user_id' in session:
         conn = get_db()
         cursor = conn.cursor()
-        cursor.execute('SELECT id, username FROM users WHERE id = ?', (session['user_id'],))
+        cursor.execute('SELECT id, username, email, image_url FROM users WHERE id = ?', (session['user_id'],))
         user = cursor.fetchone()
         conn.close()
 
         if user:
-            return jsonify({'authenticated': True, 'user': {'id': user['id'], 'username': user['username']}})
+            return jsonify({
+                'authenticated': True,
+                'user': {
+                    'id': user['id'],
+                    'username': user['username'],
+                    'email': user['email'],
+                    'image_url': user['image_url']
+                }
+            })
 
     return jsonify({'authenticated': False})
 
@@ -239,7 +279,7 @@ def check_password():
     password = data.get('password')
     
     if not password:
-        return jsonify({'error': 'Password is required'}), 400
+        return jsonify({'error': 'Le mot de passe est requis'}), 400
 
     sha1_password = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
     prefix = sha1_password[:5]
@@ -250,7 +290,7 @@ def check_password():
         response = requests.get(url)
         response.raise_for_status()
     except requests.RequestException as e:
-        return jsonify({'error': 'Failed to connect to external API'}), 500
+        return jsonify({'error': 'Échec de la connexion à l\'API externe'}), 500
 
     hashes = (line.split(':') for line in response.text.splitlines())
     count = 0
@@ -266,6 +306,35 @@ def check_password():
         'count': count,
         'message': f'Ce mot de passe a été vu {count} fois auparavant.' if is_pwned else 'Ce mot de passe n\'a pas été trouvé dans la base de données.'
     })
+
+@app.route('/api/generate-ai-password', methods=['POST'])
+def generate_ai_password():
+    data = request.get_json()
+    prompt = data.get('prompt')
+
+    if not prompt:
+        return jsonify({'error': 'Le prompt est requis'}), 400
+
+    ollama_url = "http://localhost:11434/api/generate"
+    
+    system_prompt = "Tu es un générateur de mots de passe créatif. Génère un mot de passe qui est thématiquement lié à l'entrée de l'utilisateur. Il doit être sécurisé (mélange de caractères, chiffres, symboles) mais clairement inspiré par le prompt. Par exemple, si l'entrée est 'pomme', propose quelque chose comme 'P0mm3_R0ug3!'. Affiche UNIQUEMENT le mot de passe, aucun autre texte, aucune explication, pas de markdown."
+    
+    payload = {
+        "model": "llama3.2",
+        "prompt": f"{system_prompt}\n\nUser request: {prompt}",
+        "stream": False
+    }
+
+    try:
+        response = requests.post(ollama_url, json=payload)
+        response.raise_for_status()
+        result = response.json()
+        generated_password = result.get('response', '').strip()
+        
+        return jsonify({'password': generated_password})
+    except requests.RequestException as e:
+        print(f"Error calling Ollama: {e}")
+        return jsonify({'error': 'Le service Ollama n\'est pas accessible. Veuillez vous assurer qu\'Ollama est en cours d\'exécution.'}), 503
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

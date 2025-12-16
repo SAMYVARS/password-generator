@@ -41,7 +41,7 @@ export class LoginComponent {
     }
 
     if (this.isRegisterMode) {
-      this.authService.register(this.username, this.password).subscribe({
+      this.authService.register(this.username, '', this.password).subscribe({
         next: (response) => {
           if (response.success) {
             this.successMessage = 'Compte créé ! Redirection...';

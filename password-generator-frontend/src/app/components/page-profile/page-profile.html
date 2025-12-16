@@ -1,0 +1,82 @@
+<div class="profile-container">
+  <div class="back-button-container">
+    <button mat-button (click)="navigateToHome()">
+      <mat-icon>arrow_back</mat-icon>
+      Retour à l'accueil
+    </button>
+  </div>
+
+  <div class="profile-header">
+    <mat-card class="user-card">
+      <mat-card-content>
+        <div class="user-info">
+          <img [src]="user?.image_url || 'https://wallpapers-clan.com/wp-content/uploads/2023/05/cool-pfp-02.jpg'" alt="Profile" class="profile-picture"/>
+          <div class="user-details">
+            <h2>{{ user?.username }}</h2>
+            <p class="email">{{ user?.email }}</p>
+          </div>
+          <button mat-flat-button color="primary" (click)="logout()" class="logout-button">
+            <mat-icon>logout</mat-icon>
+            Déconnexion
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="passwords-section">
+    <h3>Mes mots de passe sauvegardés</h3>
+
+    <mat-card class="passwords-card">
+      <mat-list>
+        @if (savedPasswords.length === 0) {
+          <div class="empty-state">
+            <mat-icon>lock_open</mat-icon>
+            <p>Aucun mot de passe sauvegardé</p>
+          </div>
+        }
+
+        @for (item of savedPasswords; track item.id; let last = $last) {
+          <mat-list-item>
+            <div class="password-item">
+              <div class="password-info">
+                <span class="service-name">{{ item.service_name }}</span>
+                <span class="creation-date">{{ item.created_at | date:'medium' }}</span>
+              </div>
+
+              <div class="password-value">
+                <span [class.blurred]="!item.visible">{{ item.password }}</span>
+              </div>
+
+              <div class="actions">
+                <button mat-icon-button (click)="togglePasswordVisibility(item)" [attr.aria-label]="item.visible ? 'Masquer' : 'Afficher'">
+                  <mat-icon>{{ item.visible ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <button mat-icon-button (click)="copyToClipboard(item.password)" aria-label="Copier">
+                  <mat-icon>content_copy</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deletePassword(item.id)" aria-label="Supprimer">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-list-item>
+          @if (!last) {
+            <mat-divider></mat-divider>
+          }
+        }
+      </mat-list>
+    </mat-card>
+  </div>
+</div>
+
+<p-dialog header="Confirmation" [(visible)]="displayDeleteDialog" [modal]="true" [style]="{width: '600px'}">
+  <div class="confirmation-content">
+    <i class="pi pi-exclamation-triangle" style="font-size: 2rem"></i>
+    <span>Voulez-vous vraiment supprimer ce mot de passe ?</span>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Non" icon="pi pi-times" (click)="displayDeleteDialog = false" styleClass="p-button-text"></p-button>
+    <p-button label="Oui" icon="pi pi-check" (click)="confirmDeletePassword()" styleClass="p-button-danger"></p-button>
+  </ng-template>
+</p-dialog>
