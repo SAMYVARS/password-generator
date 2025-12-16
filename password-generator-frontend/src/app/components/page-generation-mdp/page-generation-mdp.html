@@ -1,3 +1,13 @@
+<div class="auth-section">
+  <div *ngIf="!currentUser" class="auth-button">
+    <button (click)="goToLogin()" class="login-btn">Se connecter</button>
+  </div>
+  <div *ngIf="currentUser" class="user-info">
+    <span class="username">{{ currentUser.username }}</span>
+    <button (click)="logout()" class="logout-btn">Déconnexion</button>
+  </div>
+</div>
+
 <div class="password-display">
   <div class="password-text" [class.password-animating]="passwordAnimating">{{ generatedPassword }}</div>
   <div class="password-actions">

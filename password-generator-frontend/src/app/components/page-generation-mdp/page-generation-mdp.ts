@@ -1,5 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import {Checkbox} from 'primeng/checkbox';
 import { SliderModule } from 'primeng/slider';
@@ -16,6 +17,7 @@ import { InputTextModule } from 'primeng/inputtext';
   styleUrl: './page-generation-mdp.scss'
 })
 export class PageGenerationMdp {
+  currentUser: User | null = null;
   lengthMdp: number = 16;
   // Keep previous slider value to avoid regenerating when value didn't change
   lastLength: number = 16;
@@ -34,6 +36,26 @@ export class PageGenerationMdp {
 
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {
     this.generatePassword();
+
+    // S'abonner aux changements d'utilisateur
+    this.authService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['/login']);
+  }
+
+  logout(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la déconnexion', err);
+      }
+    });
   }
 
   generatePassword(): void {
