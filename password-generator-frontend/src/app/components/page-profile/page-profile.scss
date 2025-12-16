@@ -13,6 +13,9 @@
   button {
     color: #666;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
     &:hover {
       color: #333;
@@ -21,7 +24,7 @@
     }
 
     mat-icon {
-      margin-right: 0.5rem;
+      margin-right: 0;
     }
   }
 }
@@ -43,6 +46,29 @@
       flex-direction: column;
       text-align: center;
       gap: 1.5rem;
+    }
+
+    .logout-button {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #46aaff !important;
+      color: white !important;
+      border-radius: 2rem;
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(70, 170, 255, 0.3);
+
+      &:hover {
+        background-color: #1976D2 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(70, 170, 255, 0.4);
+      }
+
+      mat-icon {
+        margin: 0;
+      }
     }
   }
 
@@ -124,10 +150,6 @@
 mat-list-item {
   height: auto !important;
   padding: 0 !important;
-
-  &:hover {
-    background-color: #f8f9fa;
-  }
 }
 
 .password-item {

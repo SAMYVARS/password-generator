@@ -15,7 +15,7 @@
             <h2>{{ user?.username }}</h2>
             <p class="email">{{ user?.email }}</p>
           </div>
-          <button mat-stroked-button color="warn" (click)="logout()">
+          <button mat-flat-button color="primary" (click)="logout()" class="logout-button">
             <mat-icon>logout</mat-icon>
             Déconnexion
           </button>
@@ -72,7 +72,7 @@
 
 <p-dialog header="Confirmation" [(visible)]="displayDeleteDialog" [modal]="true" [style]="{width: '600px'}">
   <div class="confirmation-content">
-    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+    <i class="pi pi-exclamation-triangle" style="font-size: 2rem"></i>
     <span>Voulez-vous vraiment supprimer ce mot de passe ?</span>
   </div>
   <ng-template pTemplate="footer">
