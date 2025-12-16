@@ -25,11 +25,11 @@ export class Header {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {
-        this.isLoginPage = event.url === '/login';
+        this.isLoginPage = event.url === '/login' || event.url === '/register';
       });
 
     // Vérifier la route initiale
-    this.isLoginPage = this.router.url === '/login';
+    this.isLoginPage = this.router.url === '/login' || this.router.url === '/register';
   }
 
   navigateToLogin() {

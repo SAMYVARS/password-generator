@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'app-page-login',
+  selector: 'app-page-register',
   standalone: true,
   imports: [
     CommonModule,
@@ -20,47 +20,55 @@ import { MatCardModule } from '@angular/material/card';
     MatIconModule,
     MatCardModule
   ],
-  templateUrl: './page-login.html',
-  styleUrl: './page-login.scss'
+  templateUrl: './page-register.html',
+  styleUrl: './page-register.scss'
 })
-export class PageLogin {
+export class PageRegister {
+  name: string = '';
   email: string = '';
   password: string = '';
+  confirmPassword: string = '';
   hidePassword: boolean = true;
+  hideConfirmPassword: boolean = true;
   errorMessage: string = '';
 
   constructor(private router: Router) {}
 
   onSubmit() {
-    // Réinitialiser le message d'erreur
     this.errorMessage = '';
 
-    // Validation simple
-    if (!this.email || !this.password) {
+    if (!this.name || !this.email || !this.password || !this.confirmPassword) {
       this.errorMessage = 'Veuillez remplir tous les champs';
       return;
     }
 
-    // Validation de l'email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(this.email)) {
       this.errorMessage = 'Veuillez entrer une adresse email valide';
       return;
     }
 
-    // Simulation de connexion (à remplacer par un vrai service)
-    console.log('Login attempt:', { email: this.email, password: this.password });
+    if (this.password !== this.confirmPassword) {
+      this.errorMessage = 'Les mots de passe ne correspondent pas';
+      return;
+    }
 
-    // Pour l'instant, on navigue vers la page d'accueil
-    this.router.navigate(['/']);
+    console.log('Register attempt:', { name: this.name, email: this.email, password: this.password });
+
+    // Navigate to login or home after successful registration
+    this.router.navigate(['/login']);
   }
 
-  navigateToRegister() {
-    this.router.navigate(['/register']);
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
 
   togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.hideConfirmPassword = !this.hideConfirmPassword;
   }
 }
 

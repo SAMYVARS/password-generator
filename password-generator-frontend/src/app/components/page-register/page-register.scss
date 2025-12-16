@@ -1,0 +1,145 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  flex-grow: 1;
+  padding: 5rem 2rem;
+}
+
+.register-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 2rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+  mat-card-header {
+    padding-bottom: 1.5rem;
+
+    mat-card-title {
+      margin-bottom: 0;
+
+      .title-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        .person-add-icon {
+          font-size: 30px;
+          width: 30px;
+          height: 30px;
+          color: #46aaff;
+        }
+
+        h1 {
+          margin: 0;
+          font-size: 24px;
+          font-weight: 700;
+          color: #333;
+        }
+      }
+    }
+  }
+
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-field {
+  width: 100%;
+
+  .full-width {
+    width: 100%;
+  }
+
+  mat-form-field {
+    font-size: 14px;
+  }
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: #ffebee;
+  border-radius: 8px;
+  color: #c62828;
+  margin-top: 0.5rem;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  span {
+    font-size: 14px;
+  }
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+
+  .register-button {
+    width: 10rem;
+    padding: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 0.75rem;
+    background-color: #46aaff;
+    color: white;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.additional-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+
+  .login-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+
+    span {
+      color: #666;
+      font-size: 14px;
+    }
+
+    button {
+      font-weight: 600;
+
+      &:hover{
+        transition: color 0.3s ease;
+        color: #333333;
+      }
+    }
+  }
+}
+
