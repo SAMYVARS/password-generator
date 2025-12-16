@@ -3,6 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import {Checkbox} from 'primeng/checkbox';
 import { SliderModule } from 'primeng/slider';
+import { MatIconModule } from '@angular/material/icon';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthService, User } from '../../services/auth.service';
@@ -10,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-page-generation-mdp',
+  imports: [ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule, CommonModule],
   imports: [CommonModule, ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule, DialogModule, InputTextModule],
   templateUrl: './page-generation-mdp.html',
   standalone: true,
@@ -27,6 +31,7 @@ export class PageGenerationMdp {
   includeSimilar: boolean = true;
   passwordAnimating: boolean = false;
   liked: boolean = false;
+  pwnedInfo: any = null;
   savedPasswordId: number | null = null;
   displaySaveDialog: boolean = false;
   displayDeleteDialog: boolean = false;
