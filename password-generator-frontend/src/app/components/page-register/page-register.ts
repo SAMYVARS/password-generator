@@ -26,6 +26,7 @@ import { MatCardModule } from '@angular/material/card';
 export class PageRegister {
   name: string = '';
   email: string = '';
+  profilePictureUrl: string = '';
   password: string = '';
   confirmPassword: string = '';
   hidePassword: boolean = true;
@@ -53,7 +54,12 @@ export class PageRegister {
       return;
     }
 
-    console.log('Register attempt:', { name: this.name, email: this.email, password: this.password });
+    console.log('Register attempt:', {
+      name: this.name,
+      email: this.email,
+      password: this.password,
+      profilePictureUrl: this.profilePictureUrl
+    });
 
     // Navigate to login or home after successful registration
     this.router.navigate(['/login']);
@@ -71,4 +77,3 @@ export class PageRegister {
     this.hideConfirmPassword = !this.hideConfirmPassword;
   }
 }
-
