@@ -1,1 +1,10 @@
 /password-generator-backend/.idea/
+package-lock.json
+.idea/copilot.data.migration.agent.xml
+.idea/copilot.data.migration.ask.xml
+.idea/copilot.data.migration.ask2agent.xml
+.idea/copilot.data.migration.edit.xml
+.idea/misc.xml
+.idea/password-generator.iml
+.idea/vcs.xml
+.gitignore
