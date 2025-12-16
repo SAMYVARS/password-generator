@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import {Checkbox} from 'primeng/checkbox';
 import { SliderModule } from 'primeng/slider';
-import { AuthService, User } from '../../services/auth.service';
+import { MatIconModule } from '@angular/material/icon';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-page-generation-mdp',
-  imports: [CommonModule, ButtonModule, Checkbox, SliderModule, FormsModule],
+  imports: [ButtonModule, Checkbox, SliderModule, FormsModule, MatIconModule, CommonModule, InputTextModule],
   templateUrl: './page-generation-mdp.html',
   standalone: true,
   styleUrl: './page-generation-mdp.scss'
@@ -26,8 +28,13 @@ export class PageGenerationMdp {
   includeSimilar: boolean = true;
   passwordAnimating: boolean = false;
   liked: boolean = false;
+  pwnedInfo: any = null;
 
-  constructor(private authService: AuthService, private router: Router) {
+  generationMode: 'random' | 'ai' = 'random';
+  userPrompt: string = '';
+  isGeneratingAi: boolean = false;
+
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {
     this.generatePassword();
 
     // S'abonner aux changements d'utilisateur
@@ -52,6 +59,13 @@ export class PageGenerationMdp {
   }
 
   generatePassword(): void {
+    if (this.generationMode === 'ai') {
+      if (this.userPrompt.trim()) {
+        this.generateAiPassword();
+      }
+      return;
+    }
+
     let chars = '';
 
     if (this.includeLetters) {
@@ -73,6 +87,7 @@ export class PageGenerationMdp {
     // Si chars est vide alors retournée aucun mot de passe
     if (chars === '') {
       this.generatedPassword = '';
+      this.pwnedInfo = null;
       return;
     }
 
@@ -84,6 +99,44 @@ export class PageGenerationMdp {
 
     // Déclencher l'animation
     this.triggerPasswordAnimation();
+    this.checkPasswordLeak();
+  }
+
+  generateAiPassword(): void {
+    if (!this.userPrompt.trim()) return;
+
+    this.isGeneratingAi = true;
+    this.http.post('http://127.0.0.1:5000/api/generate-ai-password', { prompt: this.userPrompt })
+      .subscribe({
+        next: (response: any) => {
+          console.log('Mot de passe généré par IA :', response.password);
+          this.generatedPassword = response.password;
+          this.triggerPasswordAnimation();
+          this.checkPasswordLeak();
+          this.isGeneratingAi = false;
+          this.cdr.detectChanges(); // Force update
+        },
+        error: (error) => {
+          console.error('Erreur lors de la génération du mot de passe par IA', error);
+          this.isGeneratingAi = false;
+          this.cdr.detectChanges();
+        }
+      });
+  }
+
+  checkPasswordLeak(): void {
+    if (!this.generatedPassword) return;
+    
+    this.http.post('http://127.0.0.1:5000/api/check-password', { password: this.generatedPassword })
+      .subscribe({
+        next: (response: any) => {
+          this.pwnedInfo = response;
+        },
+        error: (error) => {
+          console.error('Erreur lors de la vérification des fuites de mot de passe', error);
+          this.pwnedInfo = null;
+        }
+      });
   }
 
   triggerPasswordAnimation(): void {

@@ -18,7 +18,15 @@
     </mat-icon>
   </div>
 </div>
-<div class="settings-container">
+
+<div class="mode-switcher">
+  <div class="custom-select-container">
+    <button class="custom-mode-btn" [class.active]="generationMode === 'random'" (click)="generationMode = 'random'">Aléatoire</button>
+    <button class="custom-mode-btn" [class.active]="generationMode === 'ai'" (click)="generationMode = 'ai'">IA</button>
+  </div>
+</div>
+
+<div class="settings-container" *ngIf="generationMode === 'random'">
   <div class="slider-container">
     <div class="slider-wrapper">
       <p-slider [(ngModel)]="lengthMdp" [min]="4" [max]="40" [step]="1" (onChange)="onSliderChange($event)" class="slider" />
@@ -59,3 +67,18 @@
   </div>
 </div>
 
+<div class="ai-container" *ngIf="generationMode === 'ai'">
+  <input type="text" pInputText [(ngModel)]="userPrompt" placeholder="Entrez une phrase pour générer un mot de passe..." class="ai-input" (keydown.enter)="generateAiPassword()" />
+  <p-button label="Générer" (click)="generateAiPassword()" [loading]="isGeneratingAi"></p-button>
+</div>
+
+<div class="leak-info" *ngIf="pwnedInfo">
+  <div *ngIf="pwnedInfo.pwned" class="leak-warning">
+    <mat-icon>warning</mat-icon>
+    <span>Ce mot de passe a été trouvé {{ pwnedInfo.count }} fois dans des fuites de données !</span>
+  </div>
+  <div *ngIf="!pwnedInfo.pwned" class="leak-success">
+    <mat-icon>check_circle</mat-icon>
+    <span>Ce mot de passe n'a pas été trouvé dans les fuites de données connues.</span>
+  </div>
+</div>
