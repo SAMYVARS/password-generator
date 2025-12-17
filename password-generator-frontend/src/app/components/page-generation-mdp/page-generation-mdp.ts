@@ -101,7 +101,7 @@ export class PageGenerationMdp {
     if (!this.userPrompt.trim()) return;
 
     this.isGeneratingAi = true;
-    this.http.post('http://127.0.0.1:5000/api/generate-ai-password', { prompt: this.userPrompt })
+    this.http.post('http://127.0.0.1:5001/api/generate-ai-password', { prompt: this.userPrompt })
       .subscribe({
         next: (response: any) => {
           console.log('Mot de passe généré par IA :', response.password);
@@ -122,7 +122,7 @@ export class PageGenerationMdp {
   checkPasswordLeak(): void {
     if (!this.generatedPassword) return;
 
-    this.http.post('http://127.0.0.1:5000/api/check-password', { password: this.generatedPassword })
+    this.http.post('http://127.0.0.1:5001/api/check-password', { password: this.generatedPassword })
       .subscribe({
         next: (response: any) => {
           this.pwnedInfo = response;

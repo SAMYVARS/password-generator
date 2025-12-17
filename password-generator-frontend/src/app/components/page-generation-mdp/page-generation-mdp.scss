@@ -324,7 +324,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  
+
   .leak-warning, .leak-success {
     display: flex;
     align-items: center;
@@ -408,7 +408,7 @@
     background-color: #f9fafb;
     transition: all 0.3s ease;
     color: #1f2937;
-    
+
     &:focus {
       outline: none;
       border-color: #46aaff;
